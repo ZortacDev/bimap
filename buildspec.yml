@@ -1,0 +1,11 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - go get github.com/stretchr/testify
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Compiling the Go code...
+      - go test
