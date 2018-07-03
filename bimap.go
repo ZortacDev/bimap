@@ -2,7 +2,7 @@ package bimap
 
 import "sync"
 
-type biMap struct {
+type BiMap struct {
 	s         sync.RWMutex
 	immutable bool
 	forward   map[interface{}]interface{}
@@ -13,7 +13,7 @@ func NewBiMap() *biMap {
 	return &biMap{forward: make(map[interface{}]interface{}), inverse: make(map[interface{}]interface{}), immutable: false}
 }
 
-func (b *biMap) Insert(k interface{}, v interface{}) {
+func (b *BiMap) Insert(k interface{}, v interface{}) {
 	b.s.RLock()
 	if b.immutable {
 		panic("Cannot modify immutable map")
@@ -26,14 +26,14 @@ func (b *biMap) Insert(k interface{}, v interface{}) {
 	b.inverse[v] = k
 }
 
-func (b *biMap) Exists(k interface{}) bool {
+func (b *BiMap) Exists(k interface{}) bool {
 	b.s.RLock()
 	defer b.s.RUnlock()
 	_, ok := b.forward[k]
 	return ok
 }
 
-func (b *biMap) ExistsInverse(k interface{}) bool {
+func (b *BiMap) ExistsInverse(k interface{}) bool {
 	b.s.RLock()
 	defer b.s.RUnlock()
 
@@ -41,7 +41,7 @@ func (b *biMap) ExistsInverse(k interface{}) bool {
 	return ok
 }
 
-func (b *biMap) Get(k interface{}) (interface{}, bool) {
+func (b *BiMap) Get(k interface{}) (interface{}, bool) {
 	if !b.Exists(k) {
 		return "", false
 	}
@@ -51,7 +51,7 @@ func (b *biMap) Get(k interface{}) (interface{}, bool) {
 
 }
 
-func (b *biMap) GetInverse(v interface{}) (interface{}, bool) {
+func (b *BiMap) GetInverse(v interface{}) (interface{}, bool) {
 	if !b.ExistsInverse(v) {
 		return "", false
 	}
@@ -61,7 +61,7 @@ func (b *biMap) GetInverse(v interface{}) (interface{}, bool) {
 
 }
 
-func (b *biMap) Delete(k interface{}) {
+func (b *BiMap) Delete(k interface{}) {
 	b.s.RLock()
 	if b.immutable {
 		panic("Cannot modify immutable map")
@@ -78,7 +78,7 @@ func (b *biMap) Delete(k interface{}) {
 	delete(b.inverse, val)
 }
 
-func (b *biMap) DeleteInverse(v interface{}) {
+func (b *BiMap) DeleteInverse(v interface{}) {
 	b.s.RLock()
 	if b.immutable {
 		panic("Cannot modify immutable map")
@@ -97,30 +97,30 @@ func (b *biMap) DeleteInverse(v interface{}) {
 
 }
 
-func (b *biMap) Size() int {
+func (b *BiMap) Size() int {
 	b.s.RLock()
 	defer b.s.RUnlock()
 	return len(b.forward)
 }
 
-func (b *biMap) MakeImmutable() {
+func (b *BiMap) MakeImmutable() {
 	b.s.Lock()
 	defer b.s.Unlock()
 	b.immutable = true
 }
 
-func (b *biMap) GetInverseMap() map[interface{}]interface{} {
+func (b *BiMap) GetInverseMap() map[interface{}]interface{} {
 	return b.inverse
 }
 
-func (b *biMap) GetForwardMap() map[interface{}]interface{} {
+func (b *BiMap) GetForwardMap() map[interface{}]interface{} {
 	return b.forward
 }
 
-func (b *biMap) Lock() {
+func (b *BiMap) Lock() {
 	b.s.Lock()
 }
 
-func (b *biMap) Unlock() {
+func (b *BiMap) Unlock() {
 	b.s.Unlock()
 }
