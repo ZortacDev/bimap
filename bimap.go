@@ -9,8 +9,8 @@ type BiMap struct {
 	inverse   map[interface{}]interface{}
 }
 
-func NewBiMap() *biMap {
-	return &biMap{forward: make(map[interface{}]interface{}), inverse: make(map[interface{}]interface{}), immutable: false}
+func NewBiMap() *BiMap {
+	return &BiMap{forward: make(map[interface{}]interface{}), inverse: make(map[interface{}]interface{}), immutable: false}
 }
 
 func (b *BiMap) Insert(k interface{}, v interface{}) {
